@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Tuo Sindacato in un'App</title>
+    <style>
+        /* --- Import Font e Reset Globale --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-blue: #0A2540;
+            --secondary-blue: #4A90E2;
+            --accent-orange: #FF6B6B;
+            --light-gray: #F5F7FA;
+            --text-dark: #333;
+            --text-light: #6C757D;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* --- Struttura Principale App --- */
+        .app-container {
+            max-width: 420px;
+            margin: auto;
+            background-color: white;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 80px; /* Spazio per la nav bar */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .header-greeting h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--primary-blue);
+        }
+        .header-greeting p {
+            margin: 0;
+            color: var(--text-light);
+            font-size: 14px;
+        }
+        .notification-bell {
+            font-size: 24px;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        /* --- Card Principale --- */
+        .main-card {
+            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
+        }
+        .main-card h2 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+        .main-card p {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* --- Sezioni e Titoli --- */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 16px;
+        }
+
+        /* --- Accesso Rapido --- */
+        .quick-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .action-item {
+            flex: 1;
+            padding: 15px 5px;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .action-item:hover {
+            transform: translateY(-3px);
+        }
+        .action-item .icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--secondary-blue);
+        }
+        .action-item span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* --- Lista Comunicazioni --- */
+        .communication-list .comm-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .comm-item span {
+            font-weight: 500;
+        }
+
+        /* --- Pulsante Chatbot (FAB) --- */
+        .chatbot-fab {
+            position: fixed;
+            bottom: 90px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--accent-orange);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        .chatbot-fab:hover {
+            transform: scale(1.1);
+        }
+
+        /* --- Finestra Chatbot (Overlay) --- */
+        .chatbot-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1001;
+            display: none; /* Nascosto di default */
+            justify-content: center;
+            align-items: center;
+        }
+        .chatbot-window {
+            width: 90%;
+            max-width: 400px;
+            height: 85%;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .chatbot-overlay.visible .chatbot-window {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .chat-header {
+            padding: 15px 20px;
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+        .close-chat {
+            font-size: 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .chat-body {
+            flex-grow: 1;
+            padding: 20px;
+            background-color: var(--light-gray);
+            overflow-y: auto;
+        }
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-message.bot .bubble {
+            background-color: white;
+            align-self: flex-start;
+            border-radius: 15px 15px 15px 0;
+        }
+        .chat-message.user .bubble {
+            background-color: #D1E7FD;
+            align-self: flex-end;
+            border-radius: 15px 15px 0 15px;
+        }
+        .chat-message .bubble {
+            padding: 10px 15px;
+            max-width: 80%;
+            font-size: 14px;
+        }
+        .chat-input {
+            padding: 15px;
+            background-color: white;
+            display: flex;
+            border-top: 1px solid #eee;
+        }
+        .chat-input input {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+        .chat-input button {
+            background-color: var(--accent-orange);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* --- Barra di Navigazione --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            max-width: 420px;
+            margin: auto;
+            right: 0;
+            height: 70px;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+        .nav-item {
+            text-align: center;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+        .nav-item.active {
+            color: var(--secondary-blue);
+        }
+        .nav-item .icon {
+            font-size: 24px;
+        }
+        .nav-item span {
+            display: block;
+            font-size: 12px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="main-content">
+            <header class="header">
+                <div class="header-greeting">
+                    <h1>Ciao, Mario! 👋</h1>
+                    <p>Il Tuo Sindacato in un'App!!</p>
+                </div>
+                <div class="notification-bell">🔔</div>
+            </header>
+
+            <div class="main-card">
+                <h2>ULTIMA NOTIZIA</h2>
+                <p>📄 È disponibile la tua busta paga di Giugno 2025</p>
+            </div>
+
+            <h2 class="section-title">Accesso Rapido</h2>
+            <div class="quick-actions">
+                <div class="action-item">
+                    <div class="icon">🗓️</div>
+                    <span>Prenota Appuntamento</span>
+                </div>
+                <div class="action-item">
+                    <div class="icon">📄</div>
+                    <span>Invia Documento</span>
+                </div>
+                <div class="action-item">
+                    <div class="icon">📞</div>
+                    <span>Contatta Esperto</span>
+                </div>
+            </div>
+
+            <h2 class="section-title">Comunicazioni Recenti</h2>
+            <div class="communication-list">
+                <div class="comm-item"><span>Rinnovo contratto collettivo: le novità</span></div>
+                <div class="comm-item"><span>Scadenze fiscali di Luglio 2025</span></div>
+            </div>
+        </div>
+
+        <div class="chatbot-fab" id="open-chat">💬</div>
+
+        <nav class="bottom-nav">
+            <div class="nav-item active">
+                <div class="icon">🏠</div>
+                <span>Home</span>
+            </div>
+            <div class="nav-item">
+                <div class="icon">💼</div>
+                <span>Servizi</span>
+            </div>
+            <div class="nav-item">
+                <div class="icon">📂</div>
+                <span>Documenti</span>
+            </div>
+            <div class="nav-item">
+                <div class="icon">👤</div>
+                <span>Profilo</span>
+            </div>
+        </nav>
+    </div>
+
+    <div class="chatbot-overlay" id="chatbot-overlay">
+        <div class="chatbot-window">
+            <div class="chat-header">
+                <h3>Assistente Virtuale</h3>
+                <div class="close-chat" id="close-chat">✕</div>
+            </div>
+            <div class="chat-body">
+                </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Scrivi il tuo messaggio...">
+                <button>▶️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Selezioniamo gli elementi dell'interfaccia con cui interagire
+        const openChatButton = document.getElementById('open-chat');
+        const closeChatButton = document.getElementById('close-chat');
+        const chatbotOverlay = document.getElementById('chatbot-overlay');
+        const chatInput = document.querySelector('.chat-input input');
+        const sendButton = document.querySelector('.chat-input button');
+        const chatBody = document.querySelector('.chat-body');
+
+        // Funzione per aggiungere un messaggio (sia dell'utente che del bot) alla finestra della chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message', sender);
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.classList.add('bubble');
+            bubbleDiv.textContent = text;
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatBody.appendChild(messageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight; // Fa scorrere la chat fino all'ultimo messaggio
+        }
+
+        // Funzione principale che viene chiamata quando l'utente invia una domanda
+        async function handleUserQuery() {
+            const userQuestion = chatInput.value;
+            if (userQuestion.trim() === '') return; // Non fa nulla se il messaggio è vuoto
+
+            addMessage(userQuestion, 'user'); // Mostra la domanda dell'utente nell'interfaccia
+            chatInput.value = ''; // Pulisce il campo di input
+            
+            addMessage('Sto pensando...', 'bot'); // Mostra un messaggio di attesa
+
+            try {
+                // --- QUESTA È LA PARTE CHIAVE ---
+                // Invia la domanda alla nostra API FastAPI locale
+                const response = await fetch('http://127.0.0.1:8000/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question: userQuestion }),
+                });
+
+                // Controlla se la richiesta API ha avuto successo
+                if (!response.ok) {
+                    throw new Error(`Errore HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Rimuove il messaggio "Sto pensando..."
+                chatBody.removeChild(chatBody.lastChild); 
+                // Aggiunge la vera risposta del bot
+                addMessage(data.answer, 'bot');
+
+            } catch (error) {
+                // In caso di errore di connessione con l'API
+                chatBody.removeChild(chatBody.lastChild);
+                addMessage('Ops, non riesco a contattare il mio cervello. Assicurati che il server sia attivo.', 'bot');
+                console.error('Errore di connessione con l\'API:', error);
+            }
+        }
+
+        // --- Gestione degli eventi ---
+        // Associa la funzione handleUserQuery al click del pulsante e alla pressione di Invio
+        sendButton.addEventListener('click', handleUserQuery);
+        chatInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleUserQuery();
+            }
+        });
+
+        // Gestisce l'apertura e la chiusura della finestra della chat
+        openChatButton.addEventListener('click', () => {
+            chatbotOverlay.style.display = 'flex';
+            setTimeout(() => chatbotOverlay.classList.add('visible'), 10);
+        });
+
+        closeChatButton.addEventListener('click', () => {
+            chatbotOverlay.classList.remove('visible');
+            setTimeout(() => chatbotOverlay.style.display = 'none', 300);
+        });
+
+        // Aggiungi un messaggio di benvenuto all'apertura della chat
+        addMessage('Ciao! Sono l\'assistente virtuale. Come posso aiutarti oggi?', 'bot');
+    </script>
+
+</body>
+</html>

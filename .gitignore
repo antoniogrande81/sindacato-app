@@ -1,0 +1,6 @@
+# File dei segreti
+.env
+
+# Cartelle di cache di Python
+__pycache__/
+*.pyc
