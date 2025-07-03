@@ -448,7 +448,7 @@
             addMessage('Sto pensando...', 'bot'); // Mostra un messaggio di attesa
 
             try {
-                const response = await fetch('https://sindacato-app-api.onrender.com/ask', {
+                const response = await fetch('https://sindacato-app-api.onrender.com/ask', { 
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

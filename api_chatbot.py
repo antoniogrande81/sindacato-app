@@ -2,10 +2,10 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import os
 
-# NUOVO IMPORT: Aggiungi questa riga
+# Import necessari per la sicurezza CORS
 from fastapi.middleware.cors import CORSMiddleware
 
-# Importiamo le stesse librerie di LangChain di prima
+# Import necessari per LangChain e OpenAI
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.chains import RetrievalQA
 from langchain_community.document_loaders import PyPDFLoader
@@ -13,10 +13,11 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from dotenv import load_dotenv
 
-# Carichiamo la chiave API dal file .env
+# Carica la chiave API dal file .env
 load_dotenv()
 
 # --- Funzione di Setup ---
+# Questa funzione prepara il nostro chatbot una sola volta, all'avvio dell'API.
 def setup_qa_chain():
     percorso_docs = './docs'
     documenti_caricati = []
@@ -46,18 +47,17 @@ app = FastAPI(
     description="Un'API per interrogare documenti di un sindacato."
 )
 
-# --- NUOVA CONFIGURAZIONE CORS ---
-# Aggiungi queste righe. Permettono al tuo browser di parlare con l'API.
-origins = ["*"]  # In produzione, dovresti essere più specifico (es. "http://tuo-sito.com")
+# --- Configurazione CORS ---
+# Questa è la parte fondamentale che risolve l'errore 404
+origins = ["*"]  # Permette richieste da qualsiasi origine
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"], # Permette tutti i metodi (incluso OPTIONS)
+    allow_headers=["*"], # Permette tutti gli header
 )
-# ------------------------------------
 
 qa_chain = setup_qa_chain()
 
