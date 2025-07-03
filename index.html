@@ -26,6 +26,23 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        /* --- Animazione di Fade-in --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated-card {
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+
         /* --- Struttura Principale App --- */
         .app-container {
             max-width: 420px;
@@ -47,9 +64,10 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 24px;
+            animation: fadeIn 0.4s ease-in-out;
         }
         .header-greeting h1 {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
             margin: 0;
             color: var(--primary-blue);
@@ -57,7 +75,7 @@
         .header-greeting p {
             margin: 0;
             color: var(--text-light);
-            font-size: 14px;
+            font-size: 16px;
         }
         .notification-bell {
             font-size: 24px;
@@ -67,9 +85,9 @@
 
         /* --- Card Principale --- */
         .main-card {
-            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
+            background: linear-gradient(135deg, #5D7AE9, #2A4DB7);
             color: white;
-            padding: 20px;
+            padding: 24px;
             border-radius: 16px;
             margin-bottom: 24px;
             box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
@@ -92,26 +110,28 @@
             font-weight: 600;
             color: var(--primary-blue);
             margin-bottom: 16px;
+            animation: fadeIn 0.4s ease-in-out;
         }
 
         /* --- Accesso Rapido --- */
         .quick-actions {
             display: flex;
-            justify-content: space-between;
+            justify-content: space-around; /* Modificato per centrare meglio i due elementi rimasti */
             gap: 15px;
             text-align: center;
             margin-bottom: 24px;
         }
         .action-item {
-            flex: 1;
+            flex-basis: 45%; /* Diamo una base per la larghezza */
             padding: 15px 5px;
             background-color: var(--light-gray);
             border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .action-item:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
         .action-item .icon {
             font-size: 28px;
@@ -128,10 +148,16 @@
             display: flex;
             align-items: center;
             padding: 15px;
-            background-color: var(--light-gray);
+            background-color: #fff;
+            border: 1px solid #eef2f7;
             border-radius: 12px;
             margin-bottom: 10px;
             cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .comm-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
         }
         .comm-item span {
             font-weight: 500;
@@ -144,7 +170,7 @@
             right: 25px;
             width: 60px;
             height: 60px;
-            background-color: var(--accent-orange);
+            background: linear-gradient(45deg, var(--accent-orange), #ff8a8a);
             color: white;
             border-radius: 50%;
             display: flex;
@@ -154,7 +180,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             cursor: pointer;
             z-index: 1000;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease;
         }
         .chatbot-fab:hover {
             transform: scale(1.1);
@@ -172,6 +198,8 @@
             display: none; /* Nascosto di default */
             justify-content: center;
             align-items: center;
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
         }
         .chatbot-window {
             width: 90%;
@@ -185,7 +213,7 @@
             overflow: hidden;
             transform: scale(0.9);
             opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
         }
         .chatbot-overlay.visible .chatbot-window {
             transform: scale(1);
@@ -207,6 +235,10 @@
             font-size: 24px;
             cursor: pointer;
             font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .close-chat:hover {
+            transform: rotate(90deg);
         }
         .chat-body {
             flex-grow: 1;
@@ -218,6 +250,7 @@
             margin-bottom: 15px;
             display: flex;
             flex-direction: column;
+            animation: fadeIn 0.3s ease-in-out;
         }
         .chat-message.bot .bubble {
             background-color: white;
@@ -233,6 +266,7 @@
             padding: 10px 15px;
             max-width: 80%;
             font-size: 14px;
+            line-height: 1.5;
         }
         .chat-input {
             padding: 15px;
@@ -257,6 +291,10 @@
             margin-left: 10px;
             font-size: 20px;
             cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .chat-input button:hover {
+            background-color: #e65c5c;
         }
 
         /* --- Barra di Navigazione --- */
@@ -281,6 +319,7 @@
             text-align: center;
             color: var(--text-light);
             cursor: pointer;
+            flex: 1;
         }
         .nav-item.active {
             color: var(--secondary-blue);
@@ -301,35 +340,31 @@
         <div class="main-content">
             <header class="header">
                 <div class="header-greeting">
-                    <h1>Ciao, Mario! 👋</h1>
-                    <p>Il Tuo Sindacato in un'App!!</p>
+                    <h1>Ciao! 👋</h1>
+                    <p>IL TUO SINDACATO IN UN'APP</p>
                 </div>
                 <div class="notification-bell">🔔</div>
             </header>
 
-            <div class="main-card">
+            <div class="main-card animated-card">
                 <h2>ULTIMA NOTIZIA</h2>
                 <p>📄 È disponibile la tua busta paga di Giugno 2025</p>
             </div>
 
             <h2 class="section-title">Accesso Rapido</h2>
             <div class="quick-actions">
-                <div class="action-item">
+                <div class="action-item animated-card" style="animation-delay: 0.1s;">
                     <div class="icon">🗓️</div>
                     <span>Prenota Appuntamento</span>
                 </div>
-                <div class="action-item">
-                    <div class="icon">📄</div>
-                    <span>Invia Documento</span>
-                </div>
-                <div class="action-item">
+                <div class="action-item animated-card" style="animation-delay: 0.2s;" onclick="window.open('https://form.jotform.com/250396120847357', '_blank');">
                     <div class="icon">📞</div>
-                    <span>Contatta Esperto</span>
+                    <span>Contatta il tuo dirigente di riferimento</span>
                 </div>
             </div>
 
             <h2 class="section-title">Comunicazioni Recenti</h2>
-            <div class="communication-list">
+            <div class="communication-list animated-card" style="animation-delay: 0.4s;">
                 <div class="comm-item"><span>Rinnovo contratto collettivo: le novità</span></div>
                 <div class="comm-item"><span>Scadenze fiscali di Luglio 2025</span></div>
             </div>
@@ -342,7 +377,7 @@
                 <div class="icon">🏠</div>
                 <span>Home</span>
             </div>
-            <div class="nav-item">
+            <div class="nav-item" onclick="window.open('https://www.bestbadge.org', '_blank');">
                 <div class="icon">💼</div>
                 <span>Servizi</span>
             </div>
@@ -406,9 +441,7 @@
             addMessage('Sto pensando...', 'bot'); // Mostra un messaggio di attesa
 
             try {
-                // --- QUESTA È LA PARTE CHIAVE ---
-                // Invia la domanda alla nostra API FastAPI locale
-                const response = await fetch('https://sindacato-app.onrender.com/ask', {
+                const response = await fetch('https://sindacato-app-api.onrender.com/ask', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -416,20 +449,16 @@
                     body: JSON.stringify({ question: userQuestion }),
                 });
 
-                // Controlla se la richiesta API ha avuto successo
                 if (!response.ok) {
                     throw new Error(`Errore HTTP: ${response.status}`);
                 }
 
                 const data = await response.json();
                 
-                // Rimuove il messaggio "Sto pensando..."
                 chatBody.removeChild(chatBody.lastChild); 
-                // Aggiunge la vera risposta del bot
                 addMessage(data.answer, 'bot');
 
             } catch (error) {
-                // In caso di errore di connessione con l'API
                 chatBody.removeChild(chatBody.lastChild);
                 addMessage('Ops, non riesco a contattare il mio cervello. Assicurati che il server sia attivo.', 'bot');
                 console.error('Errore di connessione con l\'API:', error);
@@ -437,7 +466,6 @@
         }
 
         // --- Gestione degli eventi ---
-        // Associa la funzione handleUserQuery al click del pulsante e alla pressione di Invio
         sendButton.addEventListener('click', handleUserQuery);
         chatInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
@@ -445,7 +473,6 @@
             }
         });
 
-        // Gestisce l'apertura e la chiusura della finestra della chat
         openChatButton.addEventListener('click', () => {
             chatbotOverlay.style.display = 'flex';
             setTimeout(() => chatbotOverlay.classList.add('visible'), 10);
@@ -455,7 +482,7 @@
             chatbotOverlay.classList.remove('visible');
             setTimeout(() => chatbotOverlay.style.display = 'none', 300);
         });
-
+        
         // Aggiungi un messaggio di benvenuto all'apertura della chat
         addMessage('Ciao! Sono l\'assistente virtuale. Come posso aiutarti oggi?', 'bot');
     </script>
