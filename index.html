@@ -395,8 +395,7 @@
     <div class="chatbot-overlay" id="chatbot-overlay">
         <div class="chatbot-window">
             <div class="chat-header">
-                <h3>Assistente Virtuale</h3>
-                <div class="close-chat" id="close-chat">✕</div>
+                <h3>Virgilio</h3>
             </div>
             <div class="chat-body">
                 </div>
@@ -410,7 +409,7 @@
     <script>
         // Selezioniamo gli elementi dell'interfaccia con cui interagire
         const openChatButton = document.getElementById('open-chat');
-        const closeChatButton = document.getElementById('close-chat');
+        const closeChatButton = document.querySelector('.close-chat'); // Modificato per essere più specifico
         const chatbotOverlay = document.getElementById('chatbot-overlay');
         const chatInput = document.querySelector('.chat-input input');
         const sendButton = document.querySelector('.chat-input button');
@@ -483,8 +482,8 @@
             setTimeout(() => chatbotOverlay.style.display = 'none', 300);
         });
         
-        // Aggiungi un messaggio di benvenuto all'apertura della chat
-        addMessage('Ciao! Sono l\'assistente virtuale. Come posso aiutarti oggi?', 'bot');
+        // Aggiungi il nuovo messaggio di benvenuto all'apertura della chat
+        addMessage("Benvenuto. Sono Virgilio, la tua guida digitale per ogni dubbio. Come posso esserti d'aiuto?", 'bot');
     </script>
 
 </body>
