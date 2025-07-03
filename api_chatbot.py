@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+ffrom fastapi import FastAPI
 from pydantic import BaseModel
 import os
 
@@ -17,23 +17,22 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # --- Funzione di Setup ---
-# Questa funzione prepara il nostro chatbot una sola volta, all'avvio dell'API.
 def setup_qa_chain():
     percorso_docs = './docs'
     documenti_caricati = []
-    
+
     for file in os.listdir(percorso_docs):
         if file.endswith('.pdf'):
             percorso_file = os.path.join(percorso_docs, file)
             loader = PyPDFLoader(percorso_file)
             documenti_caricati.extend(loader.load())
-    
+
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     testi_divisi = text_splitter.split_documents(documenti_caricati)
-    
+
     embeddings = OpenAIEmbeddings()
     vectorstore = Chroma.from_documents(documents=testi_divisi, embedding=embeddings)
-    
+
     qa_chain = RetrievalQA.from_chain_type(
         llm=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0),
         chain_type="stuff",
@@ -47,8 +46,7 @@ app = FastAPI(
     description="Un'API per interrogare documenti di un sindacato."
 )
 
-# --- Configurazione CORS ---
-# Questa è la parte fondamentale che risolve l'errore 404
+# --- Configurazione CORS (LA PARTE CHE MANCAVA) ---
 origins = ["*"]  # Permette richieste da qualsiasi origine
 
 app.add_middleware(
