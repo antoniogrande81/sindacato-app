@@ -341,7 +341,7 @@
             <header class="header">
                 <div class="header-greeting">
                     <h1>Ciao! 👋</h1>
-                    <p>IL TUO SINDACATO IN UN'APP</p>
+                    <p>il tuo sindacato in un'app</p>
                 </div>
                 <div class="notification-bell">🔔</div>
             </header>
@@ -396,6 +396,7 @@
         <div class="chatbot-window">
             <div class="chat-header">
                 <h3>Virgilio</h3>
+                <div class="close-chat">✕</div>
             </div>
             <div class="chat-body">
                 </div>
@@ -409,7 +410,7 @@
     <script>
         // Selezioniamo gli elementi dell'interfaccia con cui interagire
         const openChatButton = document.getElementById('open-chat');
-        const closeChatButton = document.querySelector('.close-chat'); // Modificato per essere più specifico
+        const closeChatButton = document.querySelector('.close-chat');
         const chatbotOverlay = document.getElementById('chatbot-overlay');
         const chatInput = document.querySelector('.chat-input input');
         const sendButton = document.querySelector('.chat-input button');
@@ -477,12 +478,15 @@
             setTimeout(() => chatbotOverlay.classList.add('visible'), 10);
         });
 
-        closeChatButton.addEventListener('click', () => {
-            chatbotOverlay.classList.remove('visible');
-            setTimeout(() => chatbotOverlay.style.display = 'none', 300);
-        });
+        // Questo codice ora funzionerà perché l'elemento .close-chat esiste
+        if(closeChatButton) {
+            closeChatButton.addEventListener('click', () => {
+                chatbotOverlay.classList.remove('visible');
+                setTimeout(() => chatbotOverlay.style.display = 'none', 300);
+            });
+        }
         
-        // Aggiungi il nuovo messaggio di benvenuto all'apertura della chat
+        // Aggiungi il nuovo messaggio di benvenuto
         addMessage("Benvenuto. Sono Virgilio, la tua guida digitale per ogni dubbio. Come posso esserti d'aiuto?", 'bot');
     </script>
 
