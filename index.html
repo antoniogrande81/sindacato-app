@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Il Tuo Sindacato in un'App</title>
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
     <style>
         /* --- Import Font e Reset Globale --- */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
@@ -478,7 +485,6 @@
             setTimeout(() => chatbotOverlay.classList.add('visible'), 10);
         });
 
-        // Questo codice ora funzionerà perché l'elemento .close-chat esiste
         if(closeChatButton) {
             closeChatButton.addEventListener('click', () => {
                 chatbotOverlay.classList.remove('visible');
